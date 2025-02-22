@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input'; 
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-login',
+  standalone:true,
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -16,11 +18,13 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './user-login.component.scss'
 })
 export class UserLoginComponent {
+  router = inject(Router);
   loginForm: FormGroup;
+  
 
   constructor(private fb: FormBuilder, private userService: UserService) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required]],
       password: ['', [Validators.required]]
     });
   }

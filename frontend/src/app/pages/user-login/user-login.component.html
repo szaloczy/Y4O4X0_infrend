@@ -1,11 +1,36 @@
 <div class="login-form-container">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <mat-form-field>
-            <input matInput placeholder="Email" formControlName="email">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput type="password" placeholder="password" formControlName="password">
-        </mat-form-field>
-        <button mat-raised-button type="submit" [disabled]="loginForm.invalid">Login</button>
-    </form>
+    <div class="login-form">
+        <h1>Login</h1>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <mat-form-field>
+                <mat-label>Username</mat-label>
+                <input matInput formControlName="username">
+                @if(loginForm.get('username')?.invalid && (loginForm.get('username')?.touched || loginForm.get('username')?.dirty)){
+                    @if (loginForm.get('username')?.errors?.["required"]) {
+                        <small class="error-message">
+                            Username must be given
+                        </small>
+                    }
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input matInput type="password" formControlName="password">
+                @if(loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)){
+                    @if(loginForm.get('password')?.errors?.["required"]) {
+                        <small class="error-message">
+                            Password must be given
+                        </small>
+                    }
+                }
+            </mat-form-field>
+            <div class="link-container">
+                <a routerLink="/forgot-password">Elfelejtett jelszó?</a>
+            </div>
+
+            <hr>
+            <button mat-raised-button type="submit" [disabled]="loginForm.invalid">Login</button>
+            <button mat-raised-button type="button" routerLink="/register" >Create Profile</button>
+        </form>
+    </div>
 </div>

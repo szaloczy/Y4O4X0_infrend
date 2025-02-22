@@ -1,14 +1,67 @@
+$primary-color: #1C82F9;
+$secondary-color: #2ecc71;
+$font-color: #333;
+$error-color: #e74c3c;
+
 .login-form-container {
 
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 300px;
+    height: 100vh;
+    background: linear-gradient(100deg, #81eef1, #c4c5c5);
 
-    form {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        width: 300px;
+    .login-form {
+        background-color: white;
+        border: 2px solid black;
+        border-radius: 5px;
+
+        h1 {
+            margin: 20px;
+            text-align: center;
+            color: #06c7ce;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 300px;
+            margin: 50px;
+
+            .link {
+                margin-bottom: 15px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .link-container {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+            }
+
+            hr {
+                width: 80%;
+                margin-bottom: 20px;
+            }
+        }
+
+        button {
+            padding: 10px;
+            background-color: #06c7ce;
+            border: 2px solid black;
+            font-size: 15px;
+            color: black;
+            margin-bottom: 10px;
+        }
     }
 }
+
+.error-message {
+    color: $error-color;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 14px;
+    padding: 10px;
+  }
