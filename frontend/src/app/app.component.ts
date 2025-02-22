@@ -1,12 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
-import { User, UserService } from './services/user.service';
+import { HttpClientModule } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { UserService } from './services/user.service';
+import { UserLoginComponent } from "./pages/user-login/user-login.component";
+import { User } from './types';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, HttpClientModule], 
+  imports: [CommonModule, 
+    HttpClientModule, 
+    UserLoginComponent,
+  ], 
   templateUrl: "./app.component.html",
   styleUrl: './app.component.scss'
 })
