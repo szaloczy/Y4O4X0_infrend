@@ -1,4 +1,5 @@
 import db from "../config/db";
+import bcrypt from "bcrypt";
 
 export interface User {
     id?: number;
@@ -8,41 +9,51 @@ export interface User {
     created_at?: Date;
   }
 
-export const findById = async (id: number): Promise<User | null> => {
-    const { rows } = await db.query("SELECT * FROM users WHERE id = $1", 
-        [id]);
-    return rows.length ? rows[0] : null;
-};
+/**
+ * Class for handling User
+*/ 
+class UserModel {
+    /**
+     * Create a new User
+     * @param user data of the created user
+     * @returns object of the created user (without password)
+     */
 
-export const findAll = async (): Promise<User[]> => {
-    try {
-        const { rows } = await db.query("SELECT * FROM users ORDER BY id ASC");
-        return rows;
-    } catch (error) {
-        console.log("Error fetching users: ", error);
-        return [];
+    async createUser(user: User): Promise<Omit<User, 'password'>> {
+        
+        try {
+            const { username, email, password } = user;            
+            if( !username || username.length < 3 ) {
+                throw new Error("Username must be at least 3 character long");
+            }
+            if ( !email || !email.includes("@")) {
+                throw new Error("Invalid email format");
+            }
+            if ( !password || password.length < 5) {
+                throw new Error("Password must be at least 5 character long");
+            }
+
+            const existingUser = await db.query("SELECT * FROM users WHERE email LIKE $1 OR username LIKE = $2", 
+                [email, username]
+            );
+
+            if ( existingUser.rows.length > 0 ) {
+                throw new Error("Email or username already exists");
+            }
+
+            const hashedPassword = await bcrypt.hash(password, 2);
+
+            const { rows } = await db.query(
+                "INSERT INTO users ( email, username, password ) VALUES ( $1, $2, $3 ) RETURNING *", 
+                [ email, username, hashedPassword]
+            );
+
+            return rows[0];
+
+        } catch (error) {
+            console.error("Error with the creation of the user", error);
+            throw new Error("User creation failed");
+        }
+
     }
 }
-
-export const createUser = async (user: User): Promise<User> => {
-   const { username, email, password } = user;
-   const { rows } = await db.query("INSERT INTO users ( name, email, password) VALUES ($1, $2, $3) RETURNING *", 
-    [username, email, password]);
-
-    return rows[0];
-}
-
-export const updateUser = async(id: number, user: Partial<User>): Promise<User | null> => {
-    const { username, email } = user;
-    const { rows } = await db.query("UPDATE TABLE users SET username = $1, email = $2 RETURNING *", 
-        [username, email]);
-    
-    return rows.length ? rows[0] : null;
-}
-
-/* export const deleteUser = async (id: number): Promise<boolean> => {
-    const { rowCount } = await db.query("DELETE FROM users WHERE id = $1", 
-        [id]);
-    
-    return rowCount > 0;
-} */
