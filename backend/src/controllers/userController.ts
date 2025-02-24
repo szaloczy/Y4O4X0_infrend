@@ -1,40 +1,33 @@
 import { Request, Response } from "express";
-import { findById, findAll, createUser, updateUser} from "../models/userModel";
+import userService from "../services/userService";
 
-export const getUserById = async (req: Request, res: Response) => {
-    const user = await findById(Number(req.params.id));
-    user ? res.json(user) : res.status(404).json({ error: "User not found" });
-  };
-  
-  export const getAllUsers = async (_req: Request, res: Response): Promise<void> => {
-    try {
-      const users = await findAll();
+class UserController {
 
-      if(!users || users.length == 0) {
-        return;
-      }
+    public async getUser(req: Request, res: Response): Promise<void> {
+        try {
+            const user = await userService.getUserById(req.params.id);
+            res.status(200).json(user);
+        } catch (error) {
+            res.status(500).json({ error: error});
+        }
+    }
+    
+   /*  public async register(req: Request, res: Response) {
+        try {
+            const { username, email, password } = req.body;
 
-      res.status(200).json({data: users});
-    } catch (error) {
-      console.error("Error fetching users", error);
-      res.status(500).json({error: "Internal server error" });
-    }
-  }
-  
-  export const createNewUser = async (req: Request, res: Response) => {
-    try {
-      const newUser = await createUser(req.body);
-      res.status(201).json(newUser);
-    } catch (error) {
-      res.status(500).json({ error: "User creation failed" });
-    }
-  };
-  
-  export const updateUserById = async (req: Request, res: Response) => {
-    try {
-      const updatedUser = await updateUser(Number(req.params.id), req.body);
-      updatedUser ? res.json(updatedUser) : res.status(404).json({ error: "User not found" });
-    } catch (error) {
-      res.status(500).json({ error: "Update failed" });
-    }
-  };
+            if (!username || !email || !password) {
+                return res.status(400).json({ error: "Missing required fields" });
+            }
+
+            // Új felhasználó létrehozása
+            const newUser = await userModel.createUser({ username, email, password });
+
+            return res.status(201).json(newUser);
+        } catch (error: any) {
+            return res.status(400).json({ error: error.message });
+        }
+    } */
+}
+
+export default new UserController();
