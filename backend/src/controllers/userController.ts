@@ -12,22 +12,21 @@ class UserController {
         }
     }
     
-   /*  public async register(req: Request, res: Response) {
+    public async register(req: Request, res: Response): Promise<void> {
         try {
             const { username, email, password } = req.body;
 
             if (!username || !email || !password) {
-                return res.status(400).json({ error: "Missing required fields" });
+                res.status(400).json({ error: "Missing required fields" });
             }
 
-            // Új felhasználó létrehozása
-            const newUser = await userModel.createUser({ username, email, password });
+            const newUser = await userService.createUser({ username, email, password });
 
-            return res.status(201).json(newUser);
+            res.status(201).json(newUser);
         } catch (error: any) {
-            return res.status(400).json({ error: error.message });
+            res.status(400).json({ error: error.message });
         }
-    } */
+    }
 }
 
 export default new UserController();

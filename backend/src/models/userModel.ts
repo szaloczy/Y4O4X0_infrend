@@ -29,11 +29,10 @@ class UserModel {
      * @param user - Felhasználói adatok
      * @returns - A létrehozott felhasználó (jelszó nélkül)
      */
-    async createUser(user: User): Promise<Omit<User, 'password'>> {
+    async createUser(user: User): Promise<User | null> {
         try {
             const { username, email, password } = user;
 
-            // Adatok validálása
             if (!username || username.length < 3) {
                 throw new Error("Username must be at least 3 characters long");
             }
@@ -44,7 +43,6 @@ class UserModel {
                 throw new Error("Password must be at least 5 characters long");
             }
 
-            // Ellenőrizzük, hogy a felhasználó már létezik-e
             const existingUser = await db.query(
                 "SELECT * FROM users WHERE email = $1 OR username = $2", 
                 [email, username]
@@ -54,10 +52,8 @@ class UserModel {
                 throw new Error("Email or username already exists");
             }
 
-            // Jelszó titkosítása
             const hashedPassword = await bcrypt.hash(password, 2);
 
-            // Felhasználó beszúrása az adatbázisba
             const { rows } = await db.query(
                 "INSERT INTO users (email, username, password) VALUES ($1, $2, $3) RETURNING id, username, email, created_at", 
                 [email, username, hashedPassword]

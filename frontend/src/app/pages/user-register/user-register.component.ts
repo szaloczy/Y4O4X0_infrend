@@ -1,9 +1,9 @@
-import { ɵBrowserAnimationBuilder } from '@angular/animations';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-user-register',
@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
 export class UserRegisterComponent {
   router = inject(Router);
   registerForm: FormGroup;
+  authService = inject(AuthService);
 
   constructor(private fb: FormBuilder) {
     this.registerForm = this.fb.group({
@@ -28,10 +29,12 @@ export class UserRegisterComponent {
     })
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if(this.registerForm.valid) {
-      console.log('Registration successfully', this.registerForm.value);
-      
+      this.authService.register(this.registerForm.value).subscribe({
+        next: (response) => console.log("Registration successfully", response),
+        error: (error) => console.error("Registration failed", error)
+      });
     }
   }
 }
