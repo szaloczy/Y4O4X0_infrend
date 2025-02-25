@@ -1,6 +1,7 @@
 import db from "../config/db";
 import { User } from "../types/user";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 class UserService {
 
@@ -40,6 +41,35 @@ class UserService {
         return result.rows[0] as User;
     } catch (error) {
         throw new Error("Error while creating new user");
+    }
+   }
+
+   public async loginUser(username: string, password: string) {
+    try {
+        const result = await db.query("SELECT * FROM users WHERE username = $1",
+            [username]
+        );
+
+        if (result.rows.length < 0) {
+            throw new Error("Invalid username or password");
+        }
+
+        const user = result.rows[0] as User;
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if(!isMatch) {
+            throw new Error("Invalid email or password");
+        }
+
+        const token = jwt.sign(
+            { id: user.id, username: user.username },
+            process.env.SECRET_KEY as string,
+            { expiresIn: '1d'}
+        );
+
+        return token;
+    } catch (error) {
+        throw new Error("Failed to generate token");
     }
    }
 }

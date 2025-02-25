@@ -7,19 +7,19 @@ import { Observable, tap } from "rxjs";
 })
 
 export class AuthService {
-    private apiUrl = 'http://localhost:3000/api/register';
+    private apiUrl = 'http://localhost:3000/api';
 
     constructor(private http: HttpClient) {}
 
     register(userData: any): Observable<any> {
-        return this.http.post(this.apiUrl, userData);
+        return this.http.post(this.apiUrl + "/register", userData);
     }
 
     login(data: any): Observable<any> {
-        return this.http.post(this.apiUrl, data).
+        return this.http.post(this.apiUrl + "/login", data).
             pipe(tap((result) => {
                 localStorage.setItem('authUser', JSON.stringify(result));
-            }))
+            }));
     }
 
     logout(): void {
