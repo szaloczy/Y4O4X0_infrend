@@ -31,10 +31,11 @@ export class UserRegisterComponent {
 
   onSubmit(): void {
     if(this.registerForm.valid) {
-      this.authService.register(this.registerForm.value).subscribe({
+      this.authService.register(this.registerForm.value).
+      subscribe({
         next: (response) => {
           console.log("Registration successfully", response);
-          
+          this.router.navigate(['/login'])
         },
         error: (error) => console.error("Registration failed", error)
       });

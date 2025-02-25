@@ -4,6 +4,7 @@ import { UserService } from '../../services/user.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input'; 
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-user-login',
@@ -18,6 +19,7 @@ import { Router } from '@angular/router';
   styleUrl: './user-login.component.scss'
 })
 export class UserLoginComponent {
+  authService = inject(AuthService);
   router = inject(Router);
   loginForm: FormGroup;
   
@@ -31,14 +33,14 @@ export class UserLoginComponent {
 
   onSubmit() {
     if(this.loginForm.valid) {
-    /*   this.userService.login(this.loginForm.value).subscribe(
-        response => {
-          console.log('Login successful', response);
-        },
-        error => {
-          console.error('Login failed', error);
-        }
-      ) */
+      console.log(this.loginForm.value);
+      this.authService.login(this.loginForm.value).
+        subscribe((data: any) => {
+          if(this.authService.isLoggedIn()) {
+            this.router.navigate(['/home']);
+          }
+          console.log(data);
+        });      
     }
   }
 
