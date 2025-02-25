@@ -5,26 +5,31 @@ class UserController {
 
     public async getUser(req: Request, res: Response): Promise<void> {
         try {
-            const user = await userService.getUserById(req.params.id);
-            res.status(200).json(user);
+            const userId = parseInt(req.params.id);
+
+            if (isNaN(userId)) {
+                res.status(400).json({ msg: "Invalid user ID" });
+            }
+
+            const user = await userService.getUserById(userId);
+            res.status(200).json({data: user});
         } catch (error) {
-            res.status(500).json({ error: error});
+            res.status(404).json({ error: error});
         }
     }
     
-    public async register(req: Request, res: Response): Promise<void> {
+    public async register(req: Request, res: Response) {
         try {
-            const { username, email, password } = req.body;
+            const { email, username, password } = req.body;
 
-            if (!username || !email || !password) {
-                res.status(400).json({ error: "Missing required fields" });
+            if (!email || !username || !password) {
+                res.status(400).json({ success: true, msg: "All fields are required"})
             }
 
-            const newUser = await userService.createUser({ username, email, password });
-
-            res.status(201).json(newUser);
-        } catch (error: any) {
-            res.status(400).json({ error: error.message });
+            const user = await userService.registerUser(email, username, password);
+            res.status(201).json({ success: true, data: user });
+        } catch (error) {
+            res.status(400).json({ success: false, msg: error})
         }
     }
 }
