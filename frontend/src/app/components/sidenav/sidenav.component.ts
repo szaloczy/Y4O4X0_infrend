@@ -32,22 +32,32 @@ export class SidenavComponent {
   menuItems = signal<MenuItem[]>([
     {
       icon: 'dashboard',
-      label: 'Profil',
+      label: 'Kezdőlap',
       route: 'valami'
     },
     {
-      icon: 'dashboard',
-      label: 'Egységek kezelése',
+      icon: 'store',
+      label: 'Raktár',
       route: 'valami'
     },
     {
-      icon: 'dashboard',
+      icon: 'polymer',
       label: 'Gyártmányok',
       route: 'valami'
     },
     {
-      icon: 'dashboard',
-      label: 'Megrendelés',
+      icon: 'reorder',
+      label: 'Megrendelések',
+      route: 'valami'
+    },
+    {
+      icon: 'network_cell',
+      label: 'Statisztika',
+      route: 'valami'
+    },
+    {
+      icon: 'settings',
+      label: 'Beállítások',
       route: 'valami'
     },
     {
