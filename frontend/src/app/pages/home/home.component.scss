@@ -1,3 +1,4 @@
+
 mat-toolbar {
     position: relative;
     z-index: 5;
@@ -19,3 +20,7 @@ mat-sidenav-container{
     background-color: white;
 }
 
+mat-sidenav, 
+mat-sidenav-content {
+    transition: all 500ms ease-in-out;
+}

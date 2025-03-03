@@ -26,7 +26,7 @@ export class UserRegisterComponent {
   authService = inject(AuthService);
 
   constructor(private fb: FormBuilder) {
-    this.registerForm = this.fb.group({
+    this.registerForm = this.fb.nonNullable.group({
       username: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]

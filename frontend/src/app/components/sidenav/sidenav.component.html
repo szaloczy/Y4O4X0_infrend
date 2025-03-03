@@ -6,12 +6,17 @@
     alt=""
   />
   <div class="header-text" [class.hide-header-text]="sideNavCollapsed()">
-    <h2>Vezető mérnök</h2>
+    <h2>Manager</h2>
     <p>Name</p>
   </div>
 </div>
 <mat-nav-list>
-  <a mat-list-item *ngFor="let item of menuItems()">
+  <a mat-list-item *ngFor="let item of menuItems()" 
+  [routerLink]="item.route"
+  routerLinkActive="selected-menu-item"
+  #rla="routerLinkActive"
+  [activated]="rla.isActive"
+  >
     <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
     <span matListItemTitle *ngIf="!sideNavCollapsed()">{{ item.label }}</span>
   </a>

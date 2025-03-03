@@ -3,6 +3,7 @@ import { routes } from '../../app.routes';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 export type MenuItem = {
   icon: string;
@@ -16,6 +17,8 @@ export type MenuItem = {
     CommonModule,
     MatListModule,
     MatIconModule,
+    RouterLinkActive,
+    RouterLink
   ],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss'
@@ -32,37 +35,37 @@ export class SidenavComponent {
   menuItems = signal<MenuItem[]>([
     {
       icon: 'dashboard',
-      label: 'Kezdőlap',
-      route: 'valami'
+      label: 'Dashboard',
+      route: 'dashboard'
     },
     {
       icon: 'store',
-      label: 'Raktár',
-      route: 'valami'
+      label: 'Warehouse',
+      route: 'warehouse'
     },
     {
       icon: 'polymer',
-      label: 'Gyártmányok',
+      label: 'Products',
       route: 'valami'
     },
     {
       icon: 'reorder',
-      label: 'Megrendelések',
+      label: 'Orders',
       route: 'valami'
     },
     {
       icon: 'network_cell',
-      label: 'Statisztika',
+      label: 'Statistics',
       route: 'valami'
     },
     {
       icon: 'settings',
-      label: 'Beállítások',
+      label: 'Settings',
       route: 'valami'
     },
     {
       icon: 'exit_to_app',
-      label: 'kilépés',
+      label: 'Exit',
       route: 'valami'
     }
   ]);
