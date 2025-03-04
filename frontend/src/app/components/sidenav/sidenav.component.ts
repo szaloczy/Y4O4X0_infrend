@@ -54,16 +54,6 @@ export class SidenavComponent {
       route: 'valami'
     },
     {
-      icon: 'network_cell',
-      label: 'Statistics',
-      route: 'valami'
-    },
-    {
-      icon: 'settings',
-      label: 'Settings',
-      route: 'valami'
-    },
-    {
       icon: 'exit_to_app',
       label: 'Exit',
       route: 'valami'

@@ -1,1 +1,60 @@
-<h1>Dashboard</h1>
+<div class="dashboard-container">
+    <h1>Dashboard</h1>
+  
+    <!-- Metrikák -->
+    <div class="metrics">
+      <mat-card>
+        <mat-card-title>Összes alkatrész</mat-card-title>
+        <mat-card-content>{{ totalParts }}</mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-title>Összes gyártmány</mat-card-title>
+        <mat-card-content>{{ totalProducts }}</mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-title>Összes megrendelés</mat-card-title>
+        <mat-card-content>{{ totalOrders }}</mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-title>Alacsony készlet</mat-card-title>
+        <mat-card-content>{{ lowStock }}</mat-card-content>
+      </mat-card>
+    </div>
+  
+    <!-- Diagramok -->
+    <div class="charts">
+      <mat-card>
+        <mat-card-title>Alkatrészek mennyisége</mat-card-title>
+        <mat-card-content>
+          <canvas id="partsChart"></canvas>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-title>Készletállapot</mat-card-title>
+        <mat-card-content>
+          <canvas id="stockChart"></canvas>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  
+    <!-- Gyors hozzáférés -->
+    <div class="quick-actions">
+      <button mat-raised-button color="primary" (click)="navigateTo('parts')">Új alkatrész</button>
+      <button mat-raised-button color="primary" (click)="navigateTo('products')">Új gyártmány</button>
+      <button mat-raised-button color="primary" (click)="navigateTo('orders')">Új megrendelés</button>
+    </div>
+  
+    <!-- Legutóbbi tevékenységek -->
+    <div class="recent-activities">
+      <mat-card>
+        <mat-card-title>Legutóbbi tevékenységek</mat-card-title>
+        <mat-card-content>
+          <mat-list>
+            <mat-list-item *ngFor="let activity of recentActivities">
+              {{ activity }}
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
