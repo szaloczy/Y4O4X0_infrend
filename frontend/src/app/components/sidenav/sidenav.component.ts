@@ -1,9 +1,11 @@
-import { Component, computed, Input, signal } from '@angular/core';
+import { Component, computed, inject, Input, OnInit, signal } from '@angular/core';
 import { routes } from '../../app.routes';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 export type MenuItem = {
   icon: string;
@@ -23,7 +25,12 @@ export type MenuItem = {
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss'
 })
-export class SidenavComponent {
+export class SidenavComponent implements OnInit{
+
+  authService = inject(AuthService);
+  userService = inject(UserService);
+  username: string = '';
+
   sideNavCollapsed = signal(false);
 
   @Input() set collapsed(value: boolean) {
@@ -32,34 +39,11 @@ export class SidenavComponent {
 
   profilePicSize = computed(() => this.sideNavCollapsed() ? '32' : '100');
 
-  menuItems = signal<MenuItem[]>([
-    {
-      icon: 'dashboard',
-      label: 'Dashboard',
-      route: 'dashboard'
-    },
-    {
-      icon: 'store',
-      label: 'Warehouse',
-      route: 'warehouse'
-    },
-    {
-      icon: 'polymer',
-      label: 'Products',
-      route: 'valami'
-    },
-    {
-      icon: 'reorder',
-      label: 'Orders',
-      route: 'valami'
-    },
-    {
-      icon: 'exit_to_app',
-      label: 'Exit',
-      route: 'valami'
-    }
-  ]);
+  ngOnInit(): void {
+    this.username = this.userService.getUserName() || '';
+  }
 
-
- 
+  logout() {
+    this.authService.logout();
+  }
 }

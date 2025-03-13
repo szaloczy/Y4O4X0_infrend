@@ -14,4 +14,8 @@ export class UserService {
   getAllUsers(): Observable<{data: UserInterface[]}> {
     return this.http.get<{data: UserInterface[]}>(this.apiUrl);
   }
+
+  getUserName() {
+    return localStorage.getItem('username');
+  }
 }

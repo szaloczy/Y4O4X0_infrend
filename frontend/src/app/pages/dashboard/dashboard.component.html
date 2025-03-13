@@ -1,60 +1,51 @@
 <div class="dashboard-container">
-    <h1>Dashboard</h1>
+      <span class="title">Kezdőlap</span>
+  
   
     <!-- Metrikák -->
     <div class="metrics">
-      <mat-card>
-        <mat-card-title>Összes alkatrész</mat-card-title>
-        <mat-card-content>{{ totalParts }}</mat-card-content>
+      <mat-card *ngFor="let metric of metrics | keyvalue" class="metric-card">
+        <mat-card-title>{{ metric.key }}</mat-card-title>
+        <mat-card-content>{{ metric.value }}</mat-card-content>
       </mat-card>
-      <mat-card>
-        <mat-card-title>Összes gyártmány</mat-card-title>
-        <mat-card-content>{{ totalProducts }}</mat-card-content>
-      </mat-card>
-      <mat-card>
-        <mat-card-title>Összes megrendelés</mat-card-title>
-        <mat-card-content>{{ totalOrders }}</mat-card-content>
-      </mat-card>
-      <mat-card>
-        <mat-card-title>Alacsony készlet</mat-card-title>
-        <mat-card-content>{{ lowStock }}</mat-card-content>
-      </mat-card>
-    </div>
-  
-    <!-- Diagramok -->
-    <div class="charts">
-      <mat-card>
-        <mat-card-title>Alkatrészek mennyisége</mat-card-title>
-        <mat-card-content>
-          <canvas id="partsChart"></canvas>
-        </mat-card-content>
-      </mat-card>
-      <mat-card>
-        <mat-card-title>Készletállapot</mat-card-title>
-        <mat-card-content>
-          <canvas id="stockChart"></canvas>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  
-    <!-- Gyors hozzáférés -->
-    <div class="quick-actions">
-      <button mat-raised-button color="primary" (click)="navigateTo('parts')">Új alkatrész</button>
-      <button mat-raised-button color="primary" (click)="navigateTo('products')">Új gyártmány</button>
-      <button mat-raised-button color="primary" (click)="navigateTo('orders')">Új megrendelés</button>
     </div>
   
     <!-- Legutóbbi tevékenységek -->
-    <div class="recent-activities">
-      <mat-card>
-        <mat-card-title>Legutóbbi tevékenységek</mat-card-title>
-        <mat-card-content>
-          <mat-list>
-            <mat-list-item *ngFor="let activity of recentActivities">
-              {{ activity }}
-            </mat-list-item>
-          </mat-list>
-        </mat-card-content>
-      </mat-card>
-    </div>
+    <mat-card class="recent-activities">
+      <mat-card-title>Legutóbbi tevékenységek</mat-card-title>
+      <mat-list>
+        <mat-list-item *ngFor="let activity of recentActivities">
+          {{ activity.description }}
+        </mat-list-item>
+      </mat-list>
+    </mat-card>
+  
+    <!-- Készletállapot -->
+    <mat-card class="stock-data">
+      <mat-card-title>Készletállapot</mat-card-title>
+      <mat-card-content>
+        <p>Alacsony készlet: {{ stockData.stockStatus?.low_stock }}</p>
+        <p>Elegendő készlet: {{ stockData.stockStatus?.sufficient_stock }}</p>
+      </mat-card-content>
+    </mat-card>
+  
+    <!-- Legutóbbi megrendelések -->
+    <mat-card class="recent-orders">
+      <mat-card-title>Legutóbbi megrendelések</mat-card-title>
+      <mat-list>
+        <mat-list-item *ngFor="let order of recentOrders">
+          {{ order.customer_name }} - {{ order.status }}
+        </mat-list-item>
+      </mat-list>
+    </mat-card>
+  
+    <!-- Gyártmányok -->
+    <mat-card class="products">
+      <mat-card-title>Gyártmányok</mat-card-title>
+      <mat-list>
+        <mat-list-item *ngFor="let product of products">
+          {{ product.name }}
+        </mat-list-item>
+      </mat-list>
+    </mat-card>
   </div>

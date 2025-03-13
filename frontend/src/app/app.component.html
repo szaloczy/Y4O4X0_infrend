@@ -1,4 +1,4 @@
-<ng-container *ngIf="!isLoginOrRegisterRoute()">
+<ng-container *ngIf="!isLoginOrRegisterRoute() && authService.currentUserSig() !== null ">
 <mat-toolbar class="custom-elevation">
     <button mat-icon-button (click)="collapsed.set(!collapsed())">
         <mat-icon>menu</mat-icon>
@@ -9,7 +9,6 @@
         <app-sidenav [collapsed]="collapsed()"></app-sidenav>
     </mat-sidenav>
     <mat-sidenav-content class="content" [style.margin-left]="sidenavWidth()">
-        Hello
         <router-outlet></router-outlet>
     </mat-sidenav-content>
 </mat-sidenav-container>

@@ -34,7 +34,7 @@ class UserService {
         const hashedPassword = await bcrypt.hash(password, 2);
 
         const result = await db.query(
-            "INSERT INTO users (email, username, password) VALUES ($1, $2, $3) RETURNING *", 
+            "INSERT INTO users (email, username, password_hash) VALUES ($1, $2, $3) RETURNING *", 
             [email, username, hashedPassword]
         );
 
@@ -56,7 +56,7 @@ class UserService {
 
         const user = result.rows[0] as User;
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, user.password_hash);
         if(!isMatch) {
             throw new Error("Invalid email or password");
         }
@@ -64,10 +64,15 @@ class UserService {
         const token = jwt.sign(
             { id: user.id, username: user.username },
             process.env.SECRET_KEY as string,
-            { expiresIn: '1d'}
+            { expiresIn: '5h'}
         );
 
-        return token;
+        const responseObj = {
+            token,
+            username: username
+        }
+
+        return responseObj;
     } catch (error) {
         throw new Error("Failed to generate token");
     }

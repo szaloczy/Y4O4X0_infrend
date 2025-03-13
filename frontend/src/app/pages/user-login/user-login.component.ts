@@ -28,7 +28,7 @@ export class UserLoginComponent {
   
 
   constructor(private fb: FormBuilder, private userService: UserService) {
-    this.loginForm = this.fb.group({
+    this.loginForm = this.fb.nonNullable.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]]
     });
@@ -37,11 +37,12 @@ export class UserLoginComponent {
   onSubmit() {
     if(this.loginForm.valid) {
       this.authService.login(this.loginForm.value).
-        subscribe((data: any) => {
+        subscribe((response) => {
+          console.log('response: ', response)
           if(this.authService.isLoggedIn()) {
-            this.router.navigate(['/home']);
+            this.authService.currentUserSig.set(response.user);
+            this.router.navigate(['/dashboard']);
           }
-          console.log(data);
         });      
     }
   }

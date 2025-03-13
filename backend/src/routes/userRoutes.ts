@@ -1,9 +1,9 @@
 import express from "express";
 import userController from "../controllers/userController";
+import { authenticateToken } from "../middlewares/authMiddleware";
 
 const router = express.Router();
 
-router.get("/users/:id", userController.getUser);
 router.post("/register", userController.register);
 router.post("/login", userController.login);
 

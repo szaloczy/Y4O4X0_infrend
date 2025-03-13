@@ -2,24 +2,32 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { MetricsResponse, RecentActivity } from '../types'
-
-
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
-  private apiUrl = 'http://localhost:3000/api/dashboard'; // A backend API URL-je
+
+  private apiUrl = 'http://localhost:3000/api/dashboard';
 
   constructor(private http: HttpClient) {}
 
-  // Metrikák lekérése
-  getMetrics(): Observable<MetricsResponse> {
-    return this.http.get<MetricsResponse>(`${this.apiUrl}/metrics`);
+  getMetrics(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/metrics`);
   }
 
-  // Legutóbbi tevékenységek lekérése
-  getRecentActivities(): Observable<RecentActivity[]> {
-    return this.http.get<RecentActivity[]>(`${this.apiUrl}/recent-activities`);
+  getRecentActivities(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/recent-activities`);
+  }
+
+  getStockData(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/stock-data`);
+  }
+
+  getRecentOrders(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/recent-orders`);
+  }
+
+  getProducts(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/products`);
   }
 }
