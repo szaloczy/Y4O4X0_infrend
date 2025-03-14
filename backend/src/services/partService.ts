@@ -24,6 +24,12 @@ class PartService {
         return result.rows[0];
     }
 
+    async deletePart(id: number): Promise<void> {
+        await db.query('DELETE FROM parts WHERE id = $1', 
+            [id]
+        );
+    }
+
     async getPartById(id: number): Promise<Part> {
         const result = await db.query(
         'SELECT * from parts WHERE id = $1',
