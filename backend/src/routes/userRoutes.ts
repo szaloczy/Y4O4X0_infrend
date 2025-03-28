@@ -1,10 +1,7 @@
-import express from "express";
-import userController from "../controllers/userController";
-import { authenticateToken } from "../middlewares/authMiddleware";
+import express from 'express';
 
 const router = express.Router();
 
-router.post("/register", userController.register);
-router.post("/login", userController.login);
+router.get('/user',);
 
 export default router;

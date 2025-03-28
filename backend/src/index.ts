@@ -1,23 +1,25 @@
-import express from "express";
-import dotenv from "dotenv";
-import userRoutes from "./routes/userRoutes";
-import cors from "cors";
-import errorHandler from "./middlewares/errorHandler";
-import dashboardRoutes from "./routes/dashboardRoutes";
-import partRoutes from "./routes/partRoutes";
+import express from 'express';
+import env from 'dotenv';
+import { AppDataSource } from './data-source';
+import userRoutes from './routes/userRoutes'
 
-dotenv.config();
-const app = express();
-const PORT = process.env.PORT;
+env.config()
 
-app.use(cors());
-app.use(express.json());
-app.use(errorHandler);
+async function main() {
+    await AppDataSource.initialize();
 
-app.use("/api", userRoutes);
-app.use('/api/dashboard', dashboardRoutes);
-app.use('/api/parts', partRoutes);
+    const app = express();
+    const PORT = process.env.PORT;
 
-app.listen(PORT, () => {
-    console.log(`Server running on port: ${PORT}`);
-});
+    app.use(express.json());
+    app.use('/api', userRoutes);
+
+    app.listen(PORT, (err) => {
+        if(err) {
+            console.error(err);
+        }
+        console.log(`Server listening on port ${PORT}`);
+    });
+}
+
+main();
