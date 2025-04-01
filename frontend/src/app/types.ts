@@ -1,27 +1,14 @@
-export interface UserInterface {
+export interface RegisterDTO {
+  email: string;
   username: string;
-  token: string;
+  password: string;
+}
+
+export interface LoginDTO {
   email: string;
   password: string;
 }
 
-export interface MetricsResponse {
-  totalParts: number;
-  totalProducts: number;
-  totalOrders: number;
-  lowStock: number;
-}
-
-export interface RecentActivity {
-  id: number;
-  description: string;
-  timestamp: string;
-}
-
-export interface Part {
-  id: number; 
-  name: string;
-  quantity: number; 
-  warehouse_number: string;
-  received_date: Date;
+export interface AccesTokenDTO {
+  accessToken: string;
 }

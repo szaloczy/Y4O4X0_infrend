@@ -1,1 +1,20 @@
-<p>register works!</p>
+<div class="form-container">
+    <div class="form-box">
+      <h1>Regisztráció</h1>
+      <form (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <input type="text" id="email" class="form-control" [(ngModel)]="email" name="email" placeholder="Email" required="">
+        </div>
+        <div class="mb-3">
+          <input type="text" id="username" class="form-control" [(ngModel)]="username" name="username" placeholder="Felhasználónév" required="">
+        </div>
+        <div class="mb-3">
+            <input type="password" id="password" class="form-control" [(ngModel)]="password" name="password" placeholder="Jelszó" required="">
+          </div>
+        <div class="buttons">
+        <button type="submit" class="btn btn-dark w-100">Regisztrálás</button>
+        <button type="submit" class="btn btn-dark w-100" routerLink="/login">Vissza a bejelentkezéshez</button>
+        </div>
+      </form>
+    </div>
+  </div>

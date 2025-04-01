@@ -47,7 +47,7 @@ export class UserController extends Controller {
                 username: user.username
             }, process.env.JWT_SECRET_KEY as string, {expiresIn: '2w'});
 
-            res.json({success: true, token: token});
+            res.json({accessToken: token});
 
         } catch (error) {
             this.handleError(res, error);
