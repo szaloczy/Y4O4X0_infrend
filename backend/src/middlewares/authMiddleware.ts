@@ -1,20 +1,14 @@
-import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import { expressjwt } from "express-jwt";
 
-export const authenticateToken = (req: Request, res: Response, next : NextFunction) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+export const checkUser = expressjwt({
+    secret: process.env.JWT_SECRET_KEY as string,
+    algorithms: ["HS256"]
+});
 
-    if(!token) {
-         res.status(401).json({ success: false, msg:"Unauthorized: token not found"});
-         return;
+export const handleAuthorizationError = (err, req, res, next) => {
+    if(err.name === "UnauthorizedError") {
+        res.status(401).send({ error: 'Authentication is required for this operation' });
+    } else {
+        next(err);
     }
-
-    jwt.verify(token, process.env.SECRET_KEY as string, (err, user) => {
-        if(err) {
-            res.status(403).json({ success: false, msg:"Unauthhorized: invalid token"});
-        }
-        (req as any).user = user;
-        next();
-    })
-}
+};
