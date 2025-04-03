@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
@@ -11,6 +11,7 @@ import { LoginDTO } from '../../types';
   standalone: true,
   imports: [
     FormsModule,
+    ReactiveFormsModule,
     RouterLink,
   ],
   templateUrl: './login.component.html',
@@ -39,7 +40,7 @@ export class LoginComponent {
       this.userService.login(loginData).subscribe({
         next: (response) => {
           this.authService.setToken(response.accessToken);
-          this.router.navigateByUrl('/register');
+          this.router.navigateByUrl('/');
         },
         error: (err) => {
           this.toastService.error(err.error.error, 'Error')

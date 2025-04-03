@@ -7,10 +7,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class UserService {
 
-  private readonly apiUrl = 'http://localhost:3000/api/user'
   http = inject(HttpClient);
 
-  register(data: RegisterDTO) { return this.http.post<string>(`${this.apiUrl}/signup`, data) };
+  register(data: RegisterDTO) { return this.http.post<string>(`api/user/signup`, data) };
 
-  login(data: LoginDTO) { return this.http.post<AccesTokenDTO>(`${this.apiUrl}/login`, data) };
+  login(data: LoginDTO) { return this.http.post<AccesTokenDTO>(`api/user/login`, data) };
 }

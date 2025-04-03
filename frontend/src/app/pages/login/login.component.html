@@ -1,15 +1,15 @@
 <div class="form-container">
   <div class="form-box">
     <h1>Bejelentkezés</h1>
-    <form (ngSubmit)="onSubmit()">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="mb-3">
-        <input type="text" id="email" class="form-control" name="email" placeholder="Email" required="">
+        <input type="text" id="email" class="form-control" name="email" placeholder="Email" formControlName="email" required="">
       </div>
       <div class="mb-3">
-        <input type="password" id="password" class="form-control" name="password" placeholder="Jelszó" required="">
+        <input type="password" id="password" class="form-control" name="password" placeholder="Jelszó" formControlName="password" required="">
       </div>
       <div class="buttons">
-      <button type="submit" class="btn btn-dark w-100" (click)="onSubmit()">Bejelentkezés</button>
+      <button type="submit" class="btn btn-dark w-100">Bejelentkezés</button>
       <button type="butotn" class="btn btn-dark w-100" routerLink="/register">Regisztráció</button>
       </div>
     </form>
