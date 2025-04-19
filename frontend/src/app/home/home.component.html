@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-md-12">
+        <h4>Helyszínek</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Név</th>
+                    <th>Kód</th>
+                    <th>Cím</th>
+                    <th>Aktív</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(loc of locations; track loc.id) {
+                    <tr>
+                        <td>{{ loc.name }}</td>
+                        <td>{{ loc.code }}</td>
+                        <td>{{ loc.address }} Ft</td>
+                        <td>{{ loc.active }} Ft</td>
+                        <td>
+                            <button class="btn btn-outline-primary me-2" (click)="navigateToUserForm(loc.id)">Szerkesztés</button>
+                            <button class="btn btn-outline-danger" (click)="deleteLocation($index)">Törlés</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
