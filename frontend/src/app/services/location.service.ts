@@ -7,25 +7,27 @@ import { LocationDTO } from '../../types';
 })
 export class LocationService {
 
+  private readonly apiUrl = 'http://localhost:3000/api/location';
+
   http = inject(HttpClient);
 
   getAll() {
-    return this.http.get<LocationDTO[]>('http://localhost:3000/api/location');
+    return this.http.get<LocationDTO[]>(`${this.apiUrl}`);
   }
 
   getOne(id: number) {
-    return this.http.get<LocationDTO>('/api/location/' + id);
+    return this.http.get<LocationDTO>(`${this.apiUrl}/` + id);
   }
 
   create(location: LocationDTO) {
-    return this.http.post<LocationDTO>('/api/location', location);
+    return this.http.post<LocationDTO>(`${this.apiUrl}`, location);
   }
 
   update(location: LocationDTO) {
-    return this.http.put<LocationDTO>('/api/location', location);
+    return this.http.put<LocationDTO>(`${this.apiUrl}`, location);
   }
 
   delete(id: number) {
-    return this.http.delete('/api/location/' + id);
+    return this.http.delete(`${this.apiUrl}/` + id);
   }
 }

@@ -11,7 +11,7 @@ export const AppDataSource = new DataSource({
     password: undefined,
     database: "infrend",
     synchronize: true,
-    logging: true,
+    logging: false,
     entities: [User, Location],
     migrations: [],
     subscribers: [],

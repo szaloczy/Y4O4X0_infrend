@@ -1,0 +1,121 @@
+<div class="text-center mb-4">
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-outline-primary" (click)="formType = 'donation'">Új véradás</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="formType = 'newClient'">Új véradó</button>
+    </div>
+</div>
+
+@if (formType === 'donation') {
+    <form [formGroup]="donationForm">
+        <div class="mb-3">
+            <label class="form-label">Helyszín</label>
+            <select class="form-select" name="" id="" formControlName="location"></select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Véradó</label>
+            <select class="form-select" formControlName="donor">
+              <option value="">Válassz véradót</option>
+              <option *ngFor="let user of users" [value]="user">{{ user }}</option>
+            </select>
+          </div>
+      
+          <div class="mb-3">
+            <label class="form-label">Dátum</label>
+            <input type="date" class="form-control" formControlName="date" />
+          </div>
+      
+          <div class="mb-3">
+            <label class="form-label">Alkalmas véradásra?</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" value="yes" formControlName="eligible" /> Igen
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" value="no" formControlName="eligible" /> Nem
+            </div>
+          </div>
+      
+          @if (donationForm.get('eligible')?.value === 'no') {
+            <div class="mb-3">
+                <label class="form-label">Alkalmatlanság oka</label>
+                <textarea class="form-control" formControlName="reason"></textarea>
+            </div>
+            }
+      
+          <div class="mb-3">
+            <label class="form-label">Orvos neve</label>
+            <input class="form-control" formControlName="doctor" />
+          </div>
+      
+          <div class="mb-3">
+            <label class="form-label">Irányított véradás?</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" value="yes" formControlName="directed" /> Igen
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" value="no" formControlName="directed" /> Nem
+            </div>
+          </div>
+      
+          @if(donationForm.get('directed')?.value === 'yes') {
+            <div class="mb-3">
+                <label class="form-label">Beteg neve</label>
+                <input class="form-control" formControlName="patientName" />
+            </div>
+            }
+      
+            @if (donationForm.get('directed')?.value === 'yes') {
+            <div class="mb-3">
+                <label class="form-label">TAJ szám</label>
+                <input class="form-control" formControlName="patientTaj" />
+            </div>
+            }
+      
+          <button type="submit" class="btn btn-success">Mentés</button>
+    </form>
+}
+
+@if (formType === 'newClient') {
+    <form [formGroup]="newClientForm">
+        <div class="mb-3">
+            <label class="form-label">Név</label>
+            <input class="form-control" formControlName="name" />
+          </div>
+      
+          <div class="mb-3">
+            <label class="form-label">Nem</label>
+            <select class="form-select" formControlName="gender">
+              <option value="">Válassz nemet</option>
+              <option value="male">Férfi</option>
+              <option value="female">Nő</option>
+            </select>
+          </div>
+      
+          <div class="mb-3">
+            <label class="form-label">Állampolgárság</label>
+            <input class="form-control" formControlName="citizenship" />
+          </div>
+      
+          <div class="mb-3">
+            <label class="form-label">Születési hely</label>
+            <input class="form-control" formControlName="birthPlace" />
+          </div>
+      
+          <div class="mb-3">
+            <label class="form-label">Születési idő</label>
+            <input type="date" class="form-control" formControlName="birthDate" />
+          </div>
+      
+          <div class="mb-3">
+            <label class="form-label">Lakcím</label>
+            <input class="form-control" formControlName="address" />
+          </div>
+      
+          <div class="mb-3">
+            <label class="form-label">TAJ szám</label>
+            <input class="form-control" formControlName="taj" />
+          </div>
+      
+          <button type="submit" class="btn btn-success">Mentés</button>
+    </form>
+}

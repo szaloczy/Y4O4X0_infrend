@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LocationService } from '../services/location.service';
 import { LocationDTO } from '../../types';
 import { FormsModule } from '@angular/forms';
@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class LocationEditorComponent implements OnInit {
   locationService = inject(LocationService);
+  activatedRoute = inject(ActivatedRoute);
   router = inject(Router);
 
   location: LocationDTO = {
@@ -24,19 +25,47 @@ export class LocationEditorComponent implements OnInit {
     active: true
   }
 
+  isNewLocation = true;
+
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    const locationId = this.activatedRoute.snapshot.params['id'];
+
+    if(locationId) {
+      this.isNewLocation = false;
+      this.locationService.getOne(locationId).subscribe({
+        next: (location) => {
+          this.location = location;
+          console.log(location)
+        },
+        error: (err) => {
+          this.router.navigateByUrl('/');
+          console.error(err);
+        }
+      });
+    }
   }
   
 
   saveLocation() {
-    this.locationService.create(this.location).subscribe({
-      next: () => {
-        this.router.navigateByUrl('/');
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
+    if (this.isNewLocation) {
+      this.locationService.create(this.location).subscribe({
+        next: () => {
+          this.router.navigateByUrl('/');
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+    } else {
+      this.locationService.update(this.location).subscribe({
+        next: () => {
+          this.router.navigateByUrl('/');
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+    }
+   
   }
 }

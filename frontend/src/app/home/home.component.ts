@@ -1,11 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { LocationService } from '../services/location.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { LocationDTO } from '../../types';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [
+    RouterLink
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -39,7 +41,7 @@ export class HomeComponent implements OnInit{
     });
   }
 
-  navigateToUserForm(id: number) {
+  navigateToLocationForm(id: number) {
     this.router.navigate(['edit-location', id]);
   }
 }
