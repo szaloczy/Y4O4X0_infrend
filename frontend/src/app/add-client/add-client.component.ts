@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { ClientService } from '../services/client.service';
 
 @Component({
   selector: 'app-add-client',
@@ -16,6 +17,7 @@ export class AddClientComponent implements OnInit{
   donationForm!: FormGroup;
   newClientForm!: FormGroup;
   fb = inject(FormBuilder);
+  clientService = inject(ClientService);
 
   ngOnInit(): void {
     this.donationForm = this.fb.group({
@@ -37,15 +39,69 @@ export class AddClientComponent implements OnInit{
       birthPlace: ['', Validators.required],
       birthDate: ['', Validators.required],
       address: ['', Validators.required],
-      taj: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]]
+      taj: ['', [Validators.required, Validators.pattern(/^\d{9}$/), Validators.minLength(9) ,this.tajValidator]]
     });
 
     this.onEligibilityChange();
     this.onDirectedChange();
   }
 
+  onSubmit() {
+    if (this.formType === 'donation') {
+      if (this.donationForm.valid) {
+        console.log('Véradás mentése:', this.donationForm.value);
+        // API hívás stb.
+      } else {
+        this.donationForm.markAllAsTouched();
+      }
+    } else {
+      if (this.newClientForm.valid) {
+        console.log('Új véradó mentése:', this.newClientForm.value);
+        this.clientService.create(this.newClientForm.value).subscribe({
+          next: (res) => {
+            console.log('OK');
+            console.log(res);
+          },
+          error: (err) => {
+            console.error(err);
+          }
+        })
+      } else {
+        this.newClientForm.markAllAsTouched();
+      }
+    }
+  }
+
   todayDate(): string {
     return new Date().toISOString().split('T')[0];
+  }
+
+  isValidTaj(taj: string |number): boolean {
+    const tajStr = taj.toString();
+
+    if(!/^d{9}$/.test(tajStr)) {
+      return false;
+    }
+
+    const baseDigits = tajStr.slice(0, 8).split('').map(Number);
+    const checkDigit = Number(tajStr[8]);
+
+    let sum = 0;
+    for (let i = 0; i < 8; i++) {
+      const multiplier = i % 2 === 0 ? 3 : 7;
+      sum += baseDigits[i] * multiplier;
+    }
+
+    const cdv = sum % 10;
+    return cdv === checkDigit;
+  }
+
+  tajValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (!this.isValidTaj(value)) {
+      return { invalidTaj: true };
+    }
+    return null;
   }
 
   onEligibilityChange() {

@@ -6,7 +6,7 @@
 </div>
 
 @if (formType === 'donation') {
-    <form [formGroup]="donationForm">
+    <form [formGroup]="donationForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
             <label class="form-label">Helyszín</label>
             <select class="form-select" name="" id="" formControlName="location"></select>
@@ -76,7 +76,7 @@
 }
 
 @if (formType === 'newClient') {
-    <form [formGroup]="newClientForm">
+    <form [formGroup]="newClientForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
             <label class="form-label">Név</label>
             <input class="form-control" formControlName="name" />
@@ -114,6 +114,17 @@
           <div class="mb-3">
             <label class="form-label">TAJ szám</label>
             <input class="form-control" formControlName="taj" />
+            @if (newClientForm.get("taj")?.invalid && (newClientForm.get("taj")?.touched || newClientForm.get("taj")?.dirty)) {
+              @if (newClientForm.get('taj')?.errors?.["required"]) {
+                <small class="error-message">Taj szám megadása kötelező</small>
+              }
+              @if (newClientForm.get('taj')?.errors?.["minlength"]){
+                <small class="error-message">A tajszámnak pontosan 9 számjegyből kell, hogy álljon</small>
+              }
+              @if (newClientForm.get('taj')?.errors?.["tajValidator"]) {
+                <small class="error-message">Nem megfelelő tajszámot adtál meg</small>
+              }
+            }
           </div>
       
           <button type="submit" class="btn btn-success">Mentés</button>
