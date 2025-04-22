@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ClientService } from '../services/client.service';
+import { ClientDTO } from '../../types';
 
 @Component({
   selector: 'app-add-client',
@@ -19,7 +20,19 @@ export class AddClientComponent implements OnInit{
   fb = inject(FormBuilder);
   clientService = inject(ClientService);
 
+  clients: ClientDTO[] = []; 
+
   ngOnInit(): void {
+
+    this.clientService.getAll().subscribe({
+      next: (clients) => {
+        this.clients = clients;
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    })
+
     this.donationForm = this.fb.group({
       location: ['', Validators.required],
       donor: ['', Validators.required],
@@ -33,13 +46,13 @@ export class AddClientComponent implements OnInit{
     });
 
     this.newClientForm = this.fb.group({
-      name: ['', Validators.required],
+      fullname: ['', Validators.required],
       gender: ['', Validators.required],
       citizenship: ['', Validators.required],
-      birthPlace: ['', Validators.required],
-      birthDate: ['', Validators.required],
+      birthplace: ['', Validators.required],
+      date_of_birth: ['', Validators.required],
       address: ['', Validators.required],
-      taj: ['', [Validators.required, Validators.pattern(/^\d{9}$/), Validators.minLength(9) ,this.tajValidator]]
+      taj_number: ['', [Validators.required, Validators.pattern(/^\d{9}$/), this.validateTajNumber()]]
     });
 
     this.onEligibilityChange();
@@ -76,32 +89,29 @@ export class AddClientComponent implements OnInit{
     return new Date().toISOString().split('T')[0];
   }
 
-  isValidTaj(taj: string |number): boolean {
-    const tajStr = taj.toString();
-
-    if(!/^d{9}$/.test(tajStr)) {
-      return false;
-    }
-
-    const baseDigits = tajStr.slice(0, 8).split('').map(Number);
-    const checkDigit = Number(tajStr[8]);
-
-    let sum = 0;
-    for (let i = 0; i < 8; i++) {
-      const multiplier = i % 2 === 0 ? 3 : 7;
-      sum += baseDigits[i] * multiplier;
-    }
-
-    const cdv = sum % 10;
-    return cdv === checkDigit;
-  }
-
-  tajValidator(control: AbstractControl): ValidationErrors | null {
-    const value = control.value;
-    if (!this.isValidTaj(value)) {
-      return { invalidTaj: true };
-    }
-    return null;
+  validateTajNumber(): ValidatorFn {
+    return (control: AbstractControl): {[key: string]: any} | null => {
+      const value = control.value;
+      if (!value) return null;
+  
+      const tajStr = value.toString().trim();
+      
+      // 1. Alap formai ellenőrzés
+      if (!/^\d{9}$/.test(tajStr)) {
+        return { invalidFormat: true };
+      }
+  
+      const digits = tajStr.split('').map(Number);
+      
+      // 2. CDV számjegy ellenőrzése
+      let sum = 0;
+      for (let i = 0; i < 8; i++) {
+        sum += digits[i] * (i % 2 === 0 ? 3 : 7);
+      }
+      const cdv = sum % 10;
+      
+      return cdv === digits[8] ? null : { invalidChecksum: true };
+    };
   }
 
   onEligibilityChange() {

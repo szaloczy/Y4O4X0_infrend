@@ -16,13 +16,25 @@
             <label class="form-label">Véradó</label>
             <select class="form-select" formControlName="donor">
               <option value="">Válassz véradót</option>
-              <option *ngFor="let user of users" [value]="user">{{ user }}</option>
+              @for (client of clients; track client) {
+                <option>{{ client.fullname }}</option>
+              }
             </select>
+            @if (donationForm.get("donor")?.invalid && (donationForm.get("donor")?.touched || donationForm.get("donor")?.dirty)) {
+              @if (donationForm.get('donor')?.errors?.["required"]) {
+                <small class="error-message">A donor kiválasztása kötelező</small>
+              }
+            }
           </div>
       
           <div class="mb-3">
             <label class="form-label">Dátum</label>
             <input type="date" class="form-control" formControlName="date" />
+            @if (donationForm.get("date")?.invalid && (donationForm.get("date")?.touched || donationForm.get("date")?.dirty)) {
+              @if (donationForm.get('date')?.errors?.["required"]) {
+                <small class="error-message">A dátum kiválasztása kötelező</small>
+              }
+            }
           </div>
       
           <div class="mb-3">
@@ -39,12 +51,22 @@
             <div class="mb-3">
                 <label class="form-label">Alkalmatlanság oka</label>
                 <textarea class="form-control" formControlName="reason"></textarea>
+                @if (donationForm.get("reason")?.invalid && (donationForm.get("reason")?.touched || donationForm.get("reason")?.dirty)) {
+                  @if (donationForm.get('reason')?.errors?.["required"]) {
+                    <small class="error-message">Az ok megadása kötelező</small>
+                  }
+                }
             </div>
             }
       
           <div class="mb-3">
             <label class="form-label">Orvos neve</label>
             <input class="form-control" formControlName="doctor" />
+            @if (donationForm.get("doctor")?.invalid && (donationForm.get("doctor")?.touched || donationForm.get("doctor")?.dirty)) {
+              @if (donationForm.get('doctor')?.errors?.["required"]) {
+                <small class="error-message">Az orvos megadása kötelező</small>
+              }
+            }
           </div>
       
           <div class="mb-3">
@@ -61,6 +83,11 @@
             <div class="mb-3">
                 <label class="form-label">Beteg neve</label>
                 <input class="form-control" formControlName="patientName" />
+                @if (donationForm.get("patientName")?.invalid && (donationForm.get("patientName")?.touched || donationForm.get("patientName")?.dirty)) {
+                  @if (donationForm.get('patientName')?.errors?.["required"]) {
+                    <small class="error-message">A beteg nevének megadása kötelező</small>
+                  }
+                }
             </div>
             }
       
@@ -68,6 +95,11 @@
             <div class="mb-3">
                 <label class="form-label">TAJ szám</label>
                 <input class="form-control" formControlName="patientTaj" />
+                @if (donationForm.get("patientTaj")?.invalid && (donationForm.get("patientTaj")?.touched || donationForm.get("patientTaj")?.dirty)) {
+                  @if (donationForm.get('patientTaj')?.errors?.["required"]) {
+                    <small class="error-message">A beteg taj számának megadása kötelező</small>
+                  }
+                }
             </div>
             }
       
@@ -79,7 +111,12 @@
     <form [formGroup]="newClientForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
             <label class="form-label">Név</label>
-            <input class="form-control" formControlName="name" />
+            <input class="form-control" formControlName="fullname" />
+            @if (newClientForm.get("fullname")?.invalid && (newClientForm.get("fullname")?.touched || newClientForm.get("fullname")?.dirty)) {
+              @if (newClientForm.get('fullname')?.errors?.["required"]) {
+                <small class="error-message">Teljesnév megadása kötelező</small>
+              }
+            }
           </div>
       
           <div class="mb-3">
@@ -89,40 +126,65 @@
               <option value="male">Férfi</option>
               <option value="female">Nő</option>
             </select>
+            @if (newClientForm.get("gender")?.invalid && (newClientForm.get("gender")?.touched || newClientForm.get("gender")?.dirty)) {
+              @if (newClientForm.get('gender')?.errors?.["required"]) {
+                <small class="error-message">Nem megadása kötelező</small>
+              }
+            }
           </div>
       
           <div class="mb-3">
             <label class="form-label">Állampolgárság</label>
             <input class="form-control" formControlName="citizenship" />
+            @if (newClientForm.get("citizenship")?.invalid && (newClientForm.get("citizenship")?.touched || newClientForm.get("citizenship")?.dirty)) {
+              @if (newClientForm.get('citizenship')?.errors?.["required"]) {
+                <small class="error-message">Állampolgárság megadása kötelező</small>
+              }
+            }
           </div>
       
           <div class="mb-3">
             <label class="form-label">Születési hely</label>
-            <input class="form-control" formControlName="birthPlace" />
+            <input class="form-control" formControlName="birthplace" />
+            @if (newClientForm.get("birthplace")?.invalid && (newClientForm.get("birthplace")?.touched || newClientForm.get("birthplace")?.dirty)) {
+              @if (newClientForm.get('birthplace')?.errors?.["required"]) {
+                <small class="error-message">Születésihely megadása kötelező</small>
+              }
+            }
           </div>
       
           <div class="mb-3">
             <label class="form-label">Születési idő</label>
-            <input type="date" class="form-control" formControlName="birthDate" />
+            <input type="date" class="form-control" formControlName="date_of_birth" />
+            @if (newClientForm.get("date_of_birth")?.invalid && (newClientForm.get("date_of_birth")?.touched || newClientForm.get("date_of_birth")?.dirty)) {
+              @if (newClientForm.get('date_of_birth')?.errors?.["required"]) {
+                <small class="error-message">Születésiidő megadása kötelező</small>
+              }
+            }
           </div>
       
           <div class="mb-3">
             <label class="form-label">Lakcím</label>
             <input class="form-control" formControlName="address" />
+            @if (newClientForm.get("address")?.invalid && (newClientForm.get("address")?.touched || newClientForm.get("address")?.dirty)) {
+              @if (newClientForm.get('address')?.errors?.["required"]) {
+                <small class="error-message">Cím megadása kötelező</small>
+              }
+            }
           </div>
       
           <div class="mb-3">
             <label class="form-label">TAJ szám</label>
-            <input class="form-control" formControlName="taj" />
-            @if (newClientForm.get("taj")?.invalid && (newClientForm.get("taj")?.touched || newClientForm.get("taj")?.dirty)) {
-              @if (newClientForm.get('taj')?.errors?.["required"]) {
+            <input class="form-control" formControlName="taj_number" />
+            @if (newClientForm.get("taj_number")?.invalid && (newClientForm.get("taj_number")?.touched || newClientForm.get("taj_number")?.dirty)) {
+              @if (newClientForm.get('taj_number')?.errors?.["required"]) {
                 <small class="error-message">Taj szám megadása kötelező</small>
               }
-              @if (newClientForm.get('taj')?.errors?.["minlength"]){
+              @if (newClientForm.get('taj_number')?.errors?.["pattern"]){
                 <small class="error-message">A tajszámnak pontosan 9 számjegyből kell, hogy álljon</small>
               }
-              @if (newClientForm.get('taj')?.errors?.["tajValidator"]) {
-                <small class="error-message">Nem megfelelő tajszámot adtál meg</small>
+              @if (newClientForm.get('taj_number')?.errors?.["invalidChecksum"]) {
+                <small class="error-message">Érvénytelen beteg TAJ szám. Kérjük, ellenőrizze!</small>
               }
             }
           </div>
