@@ -7,5 +7,5 @@ export const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'create-location', component: LocationEditorComponent },
     { path: 'edit-location/:id', component: LocationEditorComponent },
-    { path: 'add-client', component: AddClientComponent }
+    { path: 'add-client/:id', component: AddClientComponent }
 ];

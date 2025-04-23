@@ -1,7 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ClientService } from '../services/client.service';
-import { ClientDTO } from '../../types';
+import { ClientDTO, LocationDTO } from '../../types';
+import { ActivatedRoute } from '@angular/router';
+import { LocationService } from '../services/location.service';
+import { DonationService } from '../services/donation.service';
 
 @Component({
   selector: 'app-add-client',
@@ -19,10 +22,33 @@ export class AddClientComponent implements OnInit{
   newClientForm!: FormGroup;
   fb = inject(FormBuilder);
   clientService = inject(ClientService);
+  locationService = inject(LocationService);
+  donationService = inject(DonationService);
+  activatedRoute = inject(ActivatedRoute);
 
+  location: LocationDTO = {
+    id: 0,
+    code: '',
+    name: '',
+    address: '',
+    active: false
+  };
   clients: ClientDTO[] = []; 
 
   ngOnInit(): void {
+
+    const locationId = this.activatedRoute.snapshot.params['id'];
+
+    if(locationId) {
+      this.locationService.getOne(locationId).subscribe({
+        next: (location) => {
+          this.location = location;
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      })
+    }
 
     this.clientService.getAll().subscribe({
       next: (clients) => {
@@ -35,14 +61,14 @@ export class AddClientComponent implements OnInit{
 
     this.donationForm = this.fb.group({
       location: ['', Validators.required],
-      donor: ['', Validators.required],
+      client: ['', Validators.required],
       date: [this.todayDate(), Validators.required],
       eligible: ['yes', Validators.required],
       reason: [''],
-      doctor: ['', Validators.required],
-      directed: ['no', Validators.required],
-      patientName: [''],
-      patientTaj: ['']
+      doctor: ['', [Validators.required]],
+      controlled: ['no', Validators.required],
+      patient_fullname: [''],
+      patient_taj: [0]
     });
 
     this.newClientForm = this.fb.group({
@@ -63,7 +89,14 @@ export class AddClientComponent implements OnInit{
     if (this.formType === 'donation') {
       if (this.donationForm.valid) {
         console.log('Véradás mentése:', this.donationForm.value);
-        // API hívás stb.
+        this.donationService.create(this.donationForm.value).subscribe({
+          next: (res) => {
+            console.log(res);
+          },
+          error: (err) => {
+            console.error(err);
+          }
+        })
       } else {
         this.donationForm.markAllAsTouched();
       }

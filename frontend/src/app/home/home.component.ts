@@ -41,6 +41,10 @@ export class HomeComponent implements OnInit{
     });
   }
 
+  navigateToAddClientForm(id: number) {
+    this.router.navigate(['add-client', id]);
+  }
+
   navigateToLocationForm(id: number) {
     this.router.navigate(['edit-location', id]);
   }

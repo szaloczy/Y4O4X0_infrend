@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Donation } from "./Donation";
 
 @Entity()
 export class Location {
@@ -16,4 +17,7 @@ export class Location {
 
     @Column()
     active: boolean;
+
+    @OneToMany(() => Donation, donation => donation.location)
+    donations: Donation[];
 }

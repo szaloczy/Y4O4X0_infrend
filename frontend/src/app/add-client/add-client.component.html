@@ -9,19 +9,21 @@
     <form [formGroup]="donationForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
             <label class="form-label">Helyszín</label>
-            <select class="form-select" name="" id="" formControlName="location"></select>
+            <select class="form-select" name="location" id="location" formControlName="location">
+              <option [value]="location.id">{{ location.name }}</option>
+            </select>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Véradó</label>
-            <select class="form-select" formControlName="donor">
-              <option value="">Válassz véradót</option>
+            <select class="form-select" formControlName="client">
+              <option>Válassz véradót</option>
               @for (client of clients; track client) {
-                <option>{{ client.fullname }}</option>
+                <option [value]="client.id">{{ client.fullname }}</option>
               }
             </select>
-            @if (donationForm.get("donor")?.invalid && (donationForm.get("donor")?.touched || donationForm.get("donor")?.dirty)) {
-              @if (donationForm.get('donor')?.errors?.["required"]) {
+            @if (donationForm.get("client")?.invalid && (donationForm.get("client")?.touched || donationForm.get("client")?.dirty)) {
+              @if (donationForm.get('client')?.errors?.["required"]) {
                 <small class="error-message">A donor kiválasztása kötelező</small>
               }
             }
@@ -72,31 +74,31 @@
           <div class="mb-3">
             <label class="form-label">Irányított véradás?</label>
             <div class="form-check">
-              <input class="form-check-input" type="radio" value="yes" formControlName="directed" /> Igen
+              <input class="form-check-input" type="radio" value="yes" formControlName="controlled" /> Igen
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" value="no" formControlName="directed" /> Nem
+              <input class="form-check-input" type="radio" value="no" formControlName="controlled" /> Nem
             </div>
           </div>
       
-          @if(donationForm.get('directed')?.value === 'yes') {
+          @if(donationForm.get('controlled')?.value === 'yes') {
             <div class="mb-3">
                 <label class="form-label">Beteg neve</label>
-                <input class="form-control" formControlName="patientName" />
-                @if (donationForm.get("patientName")?.invalid && (donationForm.get("patientName")?.touched || donationForm.get("patientName")?.dirty)) {
-                  @if (donationForm.get('patientName')?.errors?.["required"]) {
+                <input class="form-control" formControlName="patient_fullname" />
+                @if (donationForm.get("patient_fullname")?.invalid && (donationForm.get("patient_fullname")?.touched || donationForm.get("patient_fullname")?.dirty)) {
+                  @if (donationForm.get('patient_fullname')?.errors?.["required"]) {
                     <small class="error-message">A beteg nevének megadása kötelező</small>
                   }
                 }
             </div>
             }
       
-            @if (donationForm.get('directed')?.value === 'yes') {
+            @if (donationForm.get('controlled')?.value === 'yes') {
             <div class="mb-3">
                 <label class="form-label">TAJ szám</label>
-                <input class="form-control" formControlName="patientTaj" />
-                @if (donationForm.get("patientTaj")?.invalid && (donationForm.get("patientTaj")?.touched || donationForm.get("patientTaj")?.dirty)) {
-                  @if (donationForm.get('patientTaj')?.errors?.["required"]) {
+                <input class="form-control" formControlName="patient_taj" />
+                @if (donationForm.get("patient_taj")?.invalid && (donationForm.get("patientTaj")?.touched || donationForm.get("patient_taj")?.dirty)) {
+                  @if (donationForm.get('patient_taj')?.errors?.["required"]) {
                     <small class="error-message">A beteg taj számának megadása kötelező</small>
                   }
                 }

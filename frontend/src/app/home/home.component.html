@@ -18,7 +18,7 @@
                         <td>{{ loc.address }}</td>
                         <td>{{ loc.active }}</td>
                         <td>
-                            <button class="btn btn-outline-primary me-2" routerLink="/add-client">Véradó rögzítése</button>
+                            <button class="btn btn-outline-primary me-2" (click)="navigateToAddClientForm(loc.id)">Véradó rögzítése</button>
                             <button class="btn btn-outline-primary me-2" (click)="navigateToLocationForm(loc.id)">Szerkesztés</button>
                             <button class="btn btn-outline-danger" (click)="deleteLocation($index)">Törlés</button>
                         </td>

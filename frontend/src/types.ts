@@ -17,6 +17,18 @@ export interface ClientDTO {
     gender: GenderType;
 }
 
+export interface DonationDTO {
+    date: Date;
+    eligible: boolean;
+    reason?: string;
+    doctor: string;
+    controlled: boolean;
+    patient_fullname?: string;
+    patient_taj?: string;
+    client: number;
+    location: number;
+}
+
 export enum GenderType {
     MALE = 'male',
     FEMALE = 'female'

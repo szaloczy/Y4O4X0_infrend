@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { GenderType } from "../types";
+import { Donation } from "./Donation";
 
 @Entity()
 export class Client {
@@ -19,7 +20,7 @@ export class Client {
     @Column()
     birthplace: string;
 
-    @Column()
+    @Column({ type: 'date'})
     date_of_birth: Date;
 
     @Column()
@@ -30,4 +31,7 @@ export class Client {
 
     @Column({ unique:true })
     taj_number: number;
+
+    @OneToMany(() => Donation, donation => donation.client)
+    donations: Donation[];
 }
