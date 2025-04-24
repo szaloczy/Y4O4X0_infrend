@@ -12,6 +12,11 @@
             <select class="form-select" name="location" id="location" formControlName="location">
               <option [value]="location.id">{{ location.name }}</option>
             </select>
+            @if (donationForm.get("location")?.invalid && (donationForm.get("location")?.touched || donationForm.get("location")?.dirty)) {
+              @if (donationForm.get('location')?.errors?.["required"]) {
+                <small class="error-message">A helyszín kiválasztása kötelező</small>
+              }
+            }
         </div>
 
         <div class="mb-3">
@@ -100,6 +105,12 @@
                 @if (donationForm.get("patient_taj")?.invalid && (donationForm.get("patientTaj")?.touched || donationForm.get("patient_taj")?.dirty)) {
                   @if (donationForm.get('patient_taj')?.errors?.["required"]) {
                     <small class="error-message">A beteg taj számának megadása kötelező</small>
+                  }
+                  @if (donationForm.get('patient_taj')?.errors?.["pattern"]){
+                    <small class="error-message">A tajszámnak pontosan 9 számjegyből kell, hogy álljon</small>
+                  }
+                  @if (donationForm.get('patient_taj')?.errors?.["invalidChecksum"]) {
+                    <small class="error-message">Érvénytelen beteg TAJ szám. Kérjük, ellenőrizze!</small>
                   }
                 }
             </div>

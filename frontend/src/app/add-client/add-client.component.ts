@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { ClientService } from '../services/client.service';
 import { ClientDTO, LocationDTO } from '../../types';
 import { ActivatedRoute } from '@angular/router';
@@ -66,9 +66,19 @@ export class AddClientComponent implements OnInit{
       eligible: ['yes', Validators.required],
       reason: [''],
       doctor: ['', [Validators.required]],
-      controlled: ['no', Validators.required],
-      patient_fullname: [''],
-      patient_taj: [0]
+      controlled: ['no', [Validators.required]],
+      patient_fullname: ['',],
+      patient_taj: [0, [Validators.pattern(/^\d{9}$/), this.validateTajNumber()]]
+    });
+
+    this.donationForm.get('eligible')?.valueChanges.subscribe(value => {
+      const controlledButton = this.donationForm.get('controlled');
+      if(value === 'no') {
+        controlledButton?.setValue('no');
+        controlledButton?.disable();
+      } else {
+        controlledButton?.enable();
+      }
     });
 
     this.newClientForm = this.fb.group({
@@ -129,14 +139,12 @@ export class AddClientComponent implements OnInit{
   
       const tajStr = value.toString().trim();
       
-      // 1. Alap formai ellenőrzés
       if (!/^\d{9}$/.test(tajStr)) {
         return { invalidFormat: true };
       }
   
       const digits = tajStr.split('').map(Number);
       
-      // 2. CDV számjegy ellenőrzése
       let sum = 0;
       for (let i = 0; i < 8; i++) {
         sum += digits[i] * (i % 2 === 0 ? 3 : 7);

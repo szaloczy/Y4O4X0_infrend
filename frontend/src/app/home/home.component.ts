@@ -1,13 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { LocationService } from '../services/location.service';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { LocationDTO } from '../../types';
 
 @Component({
   selector: 'app-home',
-  imports: [
-    RouterLink
-  ],
+  imports: [],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
