@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { ClientService } from '../services/client.service';
 import { ClientDTO, LocationDTO } from '../../types';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LocationService } from '../services/location.service';
 import { DonationService } from '../services/donation.service';
 
@@ -21,6 +21,7 @@ export class AddClientComponent implements OnInit{
   donationForm!: FormGroup;
   newClientForm!: FormGroup;
   fb = inject(FormBuilder);
+  router = inject(Router);
   clientService = inject(ClientService);
   locationService = inject(LocationService);
   donationService = inject(DonationService);
@@ -63,23 +64,23 @@ export class AddClientComponent implements OnInit{
       location: ['', Validators.required],
       client: ['', Validators.required],
       date: [this.todayDate(), Validators.required],
-      eligible: ['yes', Validators.required],
+      eligible: ['true', Validators.required],
       reason: [''],
       doctor: ['', [Validators.required]],
-      controlled: ['no', [Validators.required]],
+      controlled: ['false', [Validators.required]],
       patient_fullname: ['',],
       patient_taj: [0, [Validators.pattern(/^\d{9}$/), this.validateTajNumber()]]
     });
 
     this.donationForm.get('eligible')?.valueChanges.subscribe(value => {
       const controlledButton = this.donationForm.get('controlled');
-      if(value === 'no') {
-        controlledButton?.setValue('no');
+      if(value === 'false') {
+        controlledButton?.setValue('false');
         controlledButton?.disable();
       } else {
         controlledButton?.enable();
       }
-    });
+    }); 
 
     this.newClientForm = this.fb.group({
       fullname: ['', Validators.required],
@@ -102,6 +103,7 @@ export class AddClientComponent implements OnInit{
         this.donationService.create(this.donationForm.value).subscribe({
           next: (res) => {
             console.log(res);
+            this.router.navigateByUrl('/');
           },
           error: (err) => {
             console.error(err);
@@ -115,8 +117,7 @@ export class AddClientComponent implements OnInit{
         console.log('Új véradó mentése:', this.newClientForm.value);
         this.clientService.create(this.newClientForm.value).subscribe({
           next: (res) => {
-            console.log('OK');
-            console.log(res);
+            
           },
           error: (err) => {
             console.error(err);
@@ -156,30 +157,30 @@ export class AddClientComponent implements OnInit{
   }
 
   onEligibilityChange() {
-    this.donationForm.get('eligible')?.valueChanges.subscribe(value => {
+    this.donationForm.get('eligible')?.valueChanges.subscribe((value: boolean) => {
       const reason = this.donationForm.get('reason');
-      const directed = this.donationForm.get('directed');
-
-      if (value === 'no') {
+      const directed = this.donationForm.get('controlled');
+  
+      if (value === false) {
         reason?.setValidators([Validators.required]);
-        directed?.setValue('no');
+        directed?.setValue(false);
         directed?.disable();
       } else {
         reason?.clearValidators();
         directed?.enable();
       }
-
+  
       reason?.updateValueAndValidity();
       directed?.updateValueAndValidity();
     });
   }
-
+  
   onDirectedChange() {
-    this.donationForm.get('directed')?.valueChanges.subscribe(value => {
-      const patientName = this.donationForm.get('patientName');
-      const patientTaj = this.donationForm.get('patientTaj');
-
-      if (value === 'yes') {
+    this.donationForm.get('controlled')?.valueChanges.subscribe((value: boolean) => {
+      const patientName = this.donationForm.get('patient_fullname');
+      const patientTaj = this.donationForm.get('patient_taj');
+  
+      if (value === true) {
         patientName?.setValidators([Validators.required]);
         patientTaj?.setValidators([
           Validators.required,
@@ -189,7 +190,7 @@ export class AddClientComponent implements OnInit{
         patientName?.clearValidators();
         patientTaj?.clearValidators();
       }
-
+  
       patientName?.updateValueAndValidity();
       patientTaj?.updateValueAndValidity();
     });

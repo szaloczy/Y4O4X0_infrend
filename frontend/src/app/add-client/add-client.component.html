@@ -47,14 +47,14 @@
           <div class="mb-3">
             <label class="form-label">Alkalmas véradásra?</label>
             <div class="form-check">
-              <input class="form-check-input" type="radio" value="yes" formControlName="eligible" /> Igen
+              <input class="form-check-input" type="radio" [value]="true" formControlName="eligible" /> Igen
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" value="no" formControlName="eligible" /> Nem
+              <input class="form-check-input" type="radio" [value]="false" formControlName="eligible" /> Nem
             </div>
           </div>
       
-          @if (donationForm.get('eligible')?.value === 'no') {
+          @if (donationForm.get('eligible')?.value === false) {
             <div class="mb-3">
                 <label class="form-label">Alkalmatlanság oka</label>
                 <textarea class="form-control" formControlName="reason"></textarea>
@@ -79,14 +79,14 @@
           <div class="mb-3">
             <label class="form-label">Irányított véradás?</label>
             <div class="form-check">
-              <input class="form-check-input" type="radio" value="yes" formControlName="controlled" /> Igen
+              <input class="form-check-input" type="radio" [value]="true" formControlName="controlled" /> Igen
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" value="no" formControlName="controlled" /> Nem
+              <input class="form-check-input" type="radio" [value]="false" formControlName="controlled" /> Nem
             </div>
           </div>
       
-          @if(donationForm.get('controlled')?.value === 'yes') {
+          @if(donationForm.get('controlled')?.value === true) {
             <div class="mb-3">
                 <label class="form-label">Beteg neve</label>
                 <input class="form-control" formControlName="patient_fullname" />
@@ -98,7 +98,7 @@
             </div>
             }
       
-            @if (donationForm.get('controlled')?.value === 'yes') {
+            @if (donationForm.get('controlled')?.value === true) {
             <div class="mb-3">
                 <label class="form-label">TAJ szám</label>
                 <input class="form-control" formControlName="patient_taj" />

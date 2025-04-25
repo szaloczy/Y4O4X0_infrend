@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { DonationDTO } from '../../types';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,30 @@ export class DonationService {
 
   http = inject(HttpClient);
   
-    getAll() {
-        return this.http.get<DonationDTO[]>(`${this.apiUrl}`);
+    getAll( filters?: {
+      locationId?: number;
+      clientId?: number;
+      fromDate?: string;
+      toDate?: string;
+    }): Observable<DonationDTO[]> {
+      let params = new HttpParams();
+
+      if (filters) {
+        if (filters.locationId) {
+          params = params.set('locationId', filters.locationId.toString());
+        }
+        if (filters.clientId) {
+          params = params.set('clientId', filters.clientId.toString());
+        }
+        if (filters.fromDate) {
+          params = params.set('fromDate', filters.fromDate);
+        }
+        if (filters.toDate) {
+          params = params.set('toDate', filters.toDate);
+        }
+      }
+
+        return this.http.get<DonationDTO[]>(`${this.apiUrl}`, { params });
       }
     
       getOne(id: number) {

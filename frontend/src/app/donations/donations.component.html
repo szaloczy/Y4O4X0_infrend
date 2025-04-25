@@ -5,10 +5,10 @@
 
   <div class="card shadow-sm mb-4">
     <div class="card-body">
-      <form class="row gy-3 gx-3 align-items-end justify-content-center">
+      <form class="row gy-3 gx-3 align-items-end justify-content-center" (ngSubmit)="onFilter()">
         <div class="col-md-3">
           <label for="filterLocation" class="form-label">Helyszín</label>
-          <select id="filterLocation" class="form-select">
+          <select id="filterLocation" class="form-select" name="location" [(ngModel)]="filter.locationId">
             <option value="">Összes helyszín</option>
             @for (loc of locations; track loc) {
             <option [value]="loc.id">{{ loc.name }}</option>
@@ -18,7 +18,7 @@
 
         <div class="col-md-3">
           <label for="filterClient" class="form-label">Véradó</label>
-          <select name="filterClient" id="filterClient" class="form-select">
+          <select name="filterClient" id="filterClient" class="form-select" [(ngModel)]="filter.clientId">
             <option value="">Összes véradó</option>
             @for (client of clients; track client) {
             <option [value]="client.id">{{ client.fullname }}</option>
@@ -28,12 +28,12 @@
 
         <div class="col-md-2">
           <label for="startDate" class="form-label">Dátum -tól</label>
-          <input type="date" id="startDate" class="form-control" />
+          <input type="date" id="startDate" class="form-control" name="filterFromDate" [(ngModel)]="filter.fromDate"/>
         </div>
 
         <div class="col-md-2">
           <label for="endDate" class="form-label">Dátum -ig</label>
-          <input type="date" id="endDate" class="form-control" />
+          <input type="date" id="endDate" class="form-control" name="filterToDate" [(ngModel)]="filter.toDate"/>
         </div>
 
         <div class="col-md-2 text-center">
@@ -48,7 +48,6 @@
   <table class="table table-hover table-bordered align-middle">
     <thead class="table-light">
       <tr>
-        <th>#</th>
         <th>Helyszín</th>
         <th>Véradó neve</th>
         <th>Dátum</th>
@@ -59,9 +58,8 @@
     <tbody>
       @for (donation of donations; track donation) {
       <tr>
-        <td>1</td>
-        <td></td>
-        <td></td>
+        <td>{{ donation.location.name }}</td>
+        <td>{{ donation.client.fullname }}</td>
         <td>{{ donation.date }}</td>
         <td>{{ donation.eligible }}</td>
         <td>{{ donation.controlled }}</td>
