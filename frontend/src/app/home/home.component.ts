@@ -46,4 +46,19 @@ export class HomeComponent implements OnInit{
   navigateToLocationForm(id: number) {
     this.router.navigate(['edit-location', id]);
   }
+
+  toggleLocationActive(locationId: number, currentStatus: boolean) {
+    const newStatus = !currentStatus;
+    this.locationService.updateActiveStatus(locationId, newStatus).subscribe({
+      next: (updatedLocation) => {
+        const locIndex = this.locations.findIndex(loc => loc.id === locationId);
+        if (locIndex !== -1) {
+          this.locations[locIndex].active = updatedLocation.active;
+        }
+      },
+      error: (err) => {
+        console.error('Hiba az állapot frissítésekor:', err);
+      }
+    });
+  }
 }

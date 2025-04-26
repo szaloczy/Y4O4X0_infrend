@@ -27,6 +27,10 @@ export class LocationService {
     return this.http.put<LocationDTO>(`${this.apiUrl}`, location);
   }
 
+  updateActiveStatus(id: number, active: boolean) {
+    return this.http.patch<LocationDTO>(`${this.apiUrl}/` + id + '/active', { active });
+  }
+
   delete(id: number) {
     return this.http.delete(`${this.apiUrl}/` + id);
   }

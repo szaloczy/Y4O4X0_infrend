@@ -11,6 +11,7 @@ router.get('/location', locationController.getAll);
 router.get('/location/:id', locationController.getOne)
 router.post('/location', locationController.create);
 router.put('/location', locationController.update);
+router.patch('/location/:id/active', locationController.updateActiveStatus);
 router.delete('/location/:id', locationController.delete);
 
 const clientController = new ClientController();
