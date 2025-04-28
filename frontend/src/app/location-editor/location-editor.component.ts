@@ -34,10 +34,10 @@ export class LocationEditorComponent implements OnInit {
     const locationId = this.activatedRoute.snapshot.params['id'];
 
   this.locationForm = this.formBuilder.group({
-    code: [''],
-    name: [''],
-    address: [''],
-    active: [true]
+    code: ['', [Validators.required, Validators.minLength(6)]],
+    name: ['', [Validators.required]],
+    address: ['', [Validators.required]],
+    active: [true, [Validators.required]]
   });
 
   if (locationId) {
@@ -64,27 +64,29 @@ export class LocationEditorComponent implements OnInit {
   saveLocation() {
     const locationData = this.locationForm.value;
 
-  if (this.isNewLocation) {
-    this.locationService.create(locationData).subscribe({
-      next: () => {
-        this.router.navigateByUrl('/');
-      },
-      error: (err) => {
-        console.error(err);
+    if (this.locationForm.valid) {
+      if (this.isNewLocation) {
+        this.locationService.create(locationData).subscribe({
+          next: () => {
+            this.router.navigateByUrl('/');
+          },
+          error: (err) => {
+            console.error(err);
+          }
+        });
+      } else {
+        this.locationService.update({
+          id: this.location.id,
+          ...locationData
+        }).subscribe({
+          next: () => {
+            this.router.navigateByUrl('/');
+          },
+          error: (err) => {
+            console.error(err);
+          }
+        });
       }
-    });
-  } else {
-    this.locationService.update({
-      id: this.location.id,
-      ...locationData
-    }).subscribe({
-      next: () => {
-        this.router.navigateByUrl('/');
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
-  }
+    }
   }
 }
