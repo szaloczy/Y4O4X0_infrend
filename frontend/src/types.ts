@@ -1,3 +1,12 @@
+export interface LoginDTO {
+    email: string;
+    password: string;
+}
+
+export interface AccessTokenDTO {
+    accessTokenDTO: string;
+}
+
 export interface LocationDTO {
     id: number;
     code: string;
