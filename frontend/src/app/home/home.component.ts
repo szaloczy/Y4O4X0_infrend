@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { LocationService } from '../services/location.service';
 import { Router } from '@angular/router';
 import { LocationDTO } from '../../types';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -11,6 +12,7 @@ import { LocationDTO } from '../../types';
 })
 export class HomeComponent implements OnInit{
   locationService = inject(LocationService);
+  authService = inject(AuthService);
   router = inject(Router);
 
   locations: LocationDTO[] = [];

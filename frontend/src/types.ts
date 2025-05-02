@@ -4,7 +4,7 @@ export interface LoginDTO {
 }
 
 export interface AccessTokenDTO {
-    accessTokenDTO: string;
+    accessToken: string;
 }
 
 export interface LocationDTO {
