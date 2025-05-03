@@ -19,7 +19,7 @@ export class AppComponent {
 
   logout() {
     this.authService.removeToken();
-    this.router.navigateByUrl('/');
+    this.router.navigateByUrl('/login');
     console.log('Sikeres kijelentkezés');
   }
 }

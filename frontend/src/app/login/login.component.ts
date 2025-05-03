@@ -20,12 +20,17 @@ export class LoginComponent implements OnInit{
   authService = inject(AuthService);
   router = inject(Router);
   loginForm!: FormGroup;
+  isLoginMode = true;
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', Validators.required],
       password: ['', Validators.required]
     });
+  }
+
+  toggleMode() {
+    return this.isLoginMode = !this.isLoginMode;
   }
 
   login() {

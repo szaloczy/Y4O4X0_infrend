@@ -48,4 +48,19 @@ export class UserController extends Controller {
             this.handleError(res, error);
         }
     }
+
+    register = async (req, res) => {
+        try {
+            const { email, username, password } = req.body;
+
+            const existingUser = await this.repository.findOneBy({ email });
+            if (existingUser) {
+                return this.handleError(res, null, 400, 'This email is already in use');
+            }
+
+            const hashedPassword = await bcrypt.hash(password, 21);
+        } catch (error) {
+            
+        }
+    }
 }
