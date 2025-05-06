@@ -3,7 +3,6 @@ import { User } from "../entity/User";
 import { Controller } from "./base.controller";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { secretKey } from "../config/config";
 
 export class UserController extends Controller {
     repository = AppDataSource.getRepository(User);
@@ -29,7 +28,7 @@ export class UserController extends Controller {
         try {
             const user = await this.repository.findOne({
                 where: { email: req.body.email },
-                select: [ 'id', 'password']
+                select: [ 'id', 'password', 'role', 'username']
             });
 
             if(!user) {
@@ -41,7 +40,7 @@ export class UserController extends Controller {
                 return this.handleError(res, null, 401, 'Incorrect email or password');
             }
 
-            const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: '1d'});
+            const token = jwt.sign({ id: user.id, name: user.username, role: user.role }, 'mySecretKey', { expiresIn: '1d'});
             res.json({ accessToken: token });
         } catch (error) {
             this.handleError(res, error);

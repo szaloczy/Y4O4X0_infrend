@@ -33,4 +33,33 @@ export class AuthService {
     }
     return isLoggedIn;
   }
+
+  getUserName(): string {
+    const token = this.getToken();
+    return this.decodeToken()?.name || 'Ismeretlen';
+  }
+  
+  getUserRole(): string {
+    const token = this.getToken();
+    switch (this.decodeToken()?.role) {
+      case 'admin': return 'Adminisztrátor';
+      case 'user': return 'Önkéntes';
+      default: return 'Ismeretlen';
+    }
+  }
+
+  isAdmin(): boolean {
+    const token = this.getToken();
+    return this.decodeToken()?.role === 'admin';
+  }
+  
+  decodeToken(): any {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+      return null;
+    }
+  }
 }
