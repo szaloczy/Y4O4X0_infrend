@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { AccessTokenDTO, LoginDTO, RegisterDTO } from '../../types';
+import { AccessTokenDTO, LoginDTO, RegisterDTO, UserDTO } from '../../types';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -17,5 +17,13 @@ export class UserService {
 
   register(data: RegisterDTO) {
     return this.http.post<string>(`${this.apiUrl}`, data);
+  }
+
+  getAll() {
+    return this.http.get<UserDTO[]>(`${this.apiUrl}`);
+  }
+
+  delete(id: number) {
+    return this.http.delete(`${this.apiUrl}/` + id);
   }
 }

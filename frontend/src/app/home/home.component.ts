@@ -1,8 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { LocationService } from '../services/location.service';
 import { Router } from '@angular/router';
-import { LocationDTO } from '../../types';
+import { LocationDTO, UserDTO } from '../../types';
 import { AuthService } from '../services/auth.service';
+import { UserService } from '../services/user.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-home',
@@ -13,9 +15,12 @@ import { AuthService } from '../services/auth.service';
 export class HomeComponent implements OnInit{
   locationService = inject(LocationService);
   authService = inject(AuthService);
+  userService = inject(UserService);
+  toastService = inject(ToastService);
   router = inject(Router);
 
   locations: LocationDTO[] = [];
+  users: UserDTO[] = [];
 
   ngOnInit(): void {
     this.locationService.getAll().subscribe({
@@ -26,6 +31,15 @@ export class HomeComponent implements OnInit{
         console.error(err);
       }
     });
+
+    this.userService.getAll().subscribe({
+      next: (users) => {
+        this.users = users;
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    })
   }
 
   deleteLocation(index: number) {
@@ -34,6 +48,21 @@ export class HomeComponent implements OnInit{
     this.locationService.delete(location.id).subscribe({
       next: () => {
         this.locations.splice(index, 1);
+        this.toastService.showSuccess('Helyszín sikeresen törölve');
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
+  deleteUser(index: number) {
+    const user = this.users[index];
+
+    this.userService.delete(user.id).subscribe({
+      next: () => {
+        this.users.splice(index, 1);
+        this.toastService.showSuccess('Felhasználó sikeresen törölve');
       },
       error: (err) => {
         console.error(err);

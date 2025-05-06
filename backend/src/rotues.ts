@@ -34,5 +34,7 @@ router.delete('/donation/:id', checkUser, donationController.delete);
 
 const userController = new UserController();
 
+router.get('/user', userController.getAll);
 router.post('/user', userController.create);
 router.post('/user/login', userController.login);
+router.delete('/user/:id', checkUser, userController.delete);

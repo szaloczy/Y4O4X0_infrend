@@ -21,6 +21,13 @@ export interface LocationDTO {
     active: boolean;
 }
 
+export interface UserDTO {
+    id: number;
+    username: string;
+    email: string;
+    role: string;
+}
+
 export interface ClientDTO {
     id: number;
     fullname: string;
