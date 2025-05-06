@@ -5,6 +5,7 @@ import { ClientDTO, LocationDTO } from '../../types';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocationService } from '../services/location.service';
 import { DonationService } from '../services/donation.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-add-client',
@@ -26,6 +27,7 @@ export class AddClientComponent implements OnInit{
   locationService = inject(LocationService);
   donationService = inject(DonationService);
   activatedRoute = inject(ActivatedRoute);
+  toastService = inject(ToastService);
 
   location: LocationDTO = {
     id: 0,
@@ -103,9 +105,11 @@ export class AddClientComponent implements OnInit{
         this.donationService.create(this.donationForm.value).subscribe({
           next: (res) => {
             console.log(res);
+            this.toastService.showSuccess('Véradás sikeresen rögzítve');
             this.router.navigateByUrl('/');
           },
           error: (err) => {
+            this.toastService.showError(err.error.message);
             console.error(err);
           }
         })
@@ -117,9 +121,11 @@ export class AddClientComponent implements OnInit{
         console.log('Új véradó mentése:', this.newClientForm.value);
         this.clientService.create(this.newClientForm.value).subscribe({
           next: (res) => {
-            
+            this.router.navigateByUrl('/');
+            this.toastService.showSuccess('Új véradó sikeresen létrehozva');
           },
           error: (err) => {
+            this.toastService.showError(err.error.message);
             console.error(err);
           }
         })

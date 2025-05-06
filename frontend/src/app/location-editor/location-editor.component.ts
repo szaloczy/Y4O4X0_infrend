@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LocationService } from '../services/location.service';
 import { LocationDTO } from '../../types';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-location-editor',
@@ -16,6 +17,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 export class LocationEditorComponent implements OnInit {
   locationService = inject(LocationService);
   activatedRoute = inject(ActivatedRoute);
+  toastService = inject(ToastService);
   router = inject(Router);
   formBuilder = inject(FormBuilder);
   locationForm!: FormGroup;
@@ -69,8 +71,10 @@ export class LocationEditorComponent implements OnInit {
         this.locationService.create(locationData).subscribe({
           next: () => {
             this.router.navigateByUrl('/');
+            this.toastService.showSuccess('Helyszín létrehozása sikeres');
           },
           error: (err) => {
+            this.toastService.showError(err.error.message);
             console.error(err);
           }
         });
@@ -81,8 +85,10 @@ export class LocationEditorComponent implements OnInit {
         }).subscribe({
           next: () => {
             this.router.navigateByUrl('/');
+            this.toastService.showSuccess('Helyszín módosítás sikeres');
           },
           error: (err) => {
+            this.toastService.showError(err.error.message);
             console.error(err);
           }
         });
