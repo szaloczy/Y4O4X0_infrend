@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { AccessTokenDTO, LoginDTO } from '../../types';
+import { AccessTokenDTO, LoginDTO, RegisterDTO } from '../../types';
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +8,14 @@ import { AccessTokenDTO, LoginDTO } from '../../types';
 export class UserService {
 
   http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:3000/api/user/';
+  private readonly apiUrl = 'http://localhost:3000/api/user';
 
   login(data: LoginDTO) {
-    return this.http.post<AccessTokenDTO>('${this.apiUrl}/login', data);
+    return this.http.post<AccessTokenDTO>(`${this.apiUrl}/login`, data);
+  }
+
+  register(data: RegisterDTO) {
+    return this.http.post<string>(`${this.apiUrl}`, data);
+
   }
 }

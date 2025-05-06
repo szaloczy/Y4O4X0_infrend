@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  private TOKEN_KEY = 'accesssToken';
+  private TOKEN_KEY = 'accessToken';
   router = inject(Router);
 
   setToken(token: string) {

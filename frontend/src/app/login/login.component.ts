@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LoginDTO } from '../../types';
+import { LoginDTO, RegisterDTO } from '../../types';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
@@ -25,12 +25,39 @@ export class LoginComponent implements OnInit{
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
+      username: ['']
     });
   }
 
   toggleMode() {
     return this.isLoginMode = !this.isLoginMode;
+  }
+
+  onSubmit() {
+    if (this.loginForm.invalid) {
+      return;
+    }
+
+    if (this.isLoginMode) {
+      this.login();
+    } else {
+      this.register();
+    }
+  }
+
+  register() {
+    const registerData = this.loginForm.value as RegisterDTO;
+
+    this.userService.register(registerData).subscribe({
+      next: (response) => {
+        console.log('User registered successfully', response);
+        this.toggleMode();
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
   }
 
   login() {

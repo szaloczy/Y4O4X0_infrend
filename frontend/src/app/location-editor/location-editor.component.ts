@@ -31,7 +31,7 @@ export class LocationEditorComponent implements OnInit {
   isNewLocation = true;
 
   ngOnInit(): void {
-    const locationId = this.activatedRoute.snapshot.params['id'];
+  const locationId = this.activatedRoute.snapshot.params['id'];
 
   this.locationForm = this.formBuilder.group({
     code: ['', [Validators.required, Validators.minLength(6)]],

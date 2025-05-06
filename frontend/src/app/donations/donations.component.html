@@ -51,7 +51,7 @@
         <th>Helyszín</th>
         <th>Véradó neve</th>
         <th>Dátum</th>
-        <th>Alkalmas?</th>
+        <th>Alkalmas</th>
         <th>Irányított véradás</th>
       </tr>
     </thead>
@@ -61,8 +61,8 @@
         <td>{{ donation.location.name }}</td>
         <td>{{ donation.client.fullname }}</td>
         <td>{{ donation.date }}</td>
-        <td>{{ donation.eligible }}</td>
-        <td>{{ donation.controlled }}</td>
+        <td>{{ donation.eligible? 'Igen' : 'Nem'}}</td>
+        <td>{{ donation.controlled? 'Igen' : 'Nem' }}</td>
       </tr>
       }
     </tbody>

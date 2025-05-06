@@ -1,7 +1,8 @@
 import { expressjwt } from "express-jwt";
+import { secretKey } from "../config/config";
 
 export const checkUser = expressjwt({
-    secret: "mySecretKey",
+    secret: secretKey || "infrend",
     algorithms: ["HS256"]
 });
 

@@ -4,15 +4,20 @@ import env from "dotenv";
 import cors from 'cors';
 import { router } from "./rotues";
 import { handleAuthorizationError } from "./middlewares/protect-routes";
+import { port } from "./config/config";
 
 async function main() {
     await AppDataSource.initialize();
 
     env.config();
     const app = express();
-    const PORT = process.env.PORT || '3000';
-
-    app.use(cors());
+    const PORT = port || 3000;
+    
+    app.use(cors({
+        origin: 'http://localhost:4200',
+        credentials: true,
+        allowedHeaders: ['Content-Type', 'Authorization'],
+      }));
     app.use(express.json());
     app.use('/api', router, handleAuthorizationError);
 

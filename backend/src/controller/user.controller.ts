@@ -3,6 +3,7 @@ import { User } from "../entity/User";
 import { Controller } from "./base.controller";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { secretKey } from "../config/config";
 
 export class UserController extends Controller {
     repository = AppDataSource.getRepository(User);
@@ -40,27 +41,10 @@ export class UserController extends Controller {
                 return this.handleError(res, null, 401, 'Incorrect email or password');
             }
 
-            const token = jwt.sign({ id: user.id }, 'mySecret', { expiresIn: '1d'});
+            const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: '1d'});
             res.json({ accessToken: token });
-
-            res.json({ sucess: true });
         } catch (error) {
             this.handleError(res, error);
-        }
-    }
-
-    register = async (req, res) => {
-        try {
-            const { email, username, password } = req.body;
-
-            const existingUser = await this.repository.findOneBy({ email });
-            if (existingUser) {
-                return this.handleError(res, null, 400, 'This email is already in use');
-            }
-
-            const hashedPassword = await bcrypt.hash(password, 21);
-        } catch (error) {
-            
         }
     }
 }

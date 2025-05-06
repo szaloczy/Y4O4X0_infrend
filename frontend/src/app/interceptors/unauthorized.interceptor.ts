@@ -1,23 +1,18 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
-import { catchError, Observable } from 'rxjs';
+import { inject } from '@angular/core';
 
-@Injectable()
-export class UnauthorizedInterceptor implements HttpInterceptor {
-  authService = inject(AuthService);
-  router = inject(Router);
-
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    return next.handle(request).pipe(
-      catchError((err) => {
-        if (err instanceof HttpErrorResponse && err.status === 401) {
-          this.authService.removeToken();
-          this.router.navigateByUrl('/login');
-        }
-        throw err;
-      })
-    );
-  }
-}
+export const UnauthorizedInterceptor: HttpInterceptorFn = (req, next) => {
+  const router = inject(Router);
+  
+  return next(req).pipe(
+    catchError(err => {
+      if (err.status === 401) {
+        router.navigate(['/login']);
+      }
+      return throwError(() => err);
+    })
+  );
+};
